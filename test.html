@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: #222f3e;
+        }
+        body {
+            background: #74b9ff;
+        }
+        #warp {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 100px;
+        }
+        .form {
+            padding: 20px;
+        }
+        .input-info {
+            margin-left: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            padding: 0 5px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-evenly;
+        }
+        .btn {
+            width: 50px;
+            height: 28px;
+        }
+        .output {
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div id="warp">
+        <h1>Form test</h1>
+        <form action="/" class="form">
+            <div class="info">
+                <label for="value1">value1</label>
+                <input type="checkbox" data-check="value1">
+                <select id="value1" data-input="value1" class="input-info">
+                    <option value="disable">Disable</option>
+                    <option value="ensable">Enable</option>
+                </select><br>
+                <label for="value2">value2</label>
+                <input type="checkbox" data-check="value2">
+                <input type="text" id="value2" data-input="value2" class="input-info"><br>
+                <label for="value3">value3</label>
+                <input type="checkbox" data-check="value3">
+                <select id="value3" data-input="value3" class="input-info">
+                    <option value=""></option>
+                    <option value="I-lan">I-lan</option>
+                    <option value="Taipei">Taipei</option>
+                    <option value="Taoyuan">Taoyuan</option>
+                    <option value="Kaohsiung">Kaohsiung</option>
+                    <option value="Hualien">Hualien</option>
+                </select><br>
+                <label for="value4">value4</label>
+                <input type="checkbox" data-check="value4">
+                <input type="text" id="value4" data-input="value4" class="input-info"><br>
+            </div>
+            <div class="btn-group">
+                <input type="submit" value="送出" id="submit" class="btn">
+                <input type="reset" value="reset" class="btn"">
+            </div>
+        </form>
+        <pre class="output"></pre>
+    </div>
+
+    <script>
+        (function() {
+            const checkBoxs = document.querySelectorAll('[data-check]');
+            const form = document.querySelector('form');
+            const output = document.querySelector('.output');
+
+            const submitHandler = function(e) {
+                e.preventDefault();
+                const inputs = document.querySelectorAll('.info > .input-info:not([disabled])');
+                const valueObj = [...inputs].reduce((prev, current) => {
+                    prev[current.dataset['input']] = current.value;
+                    return prev;
+                }, {});
+                console.log(valueObj);
+                output.innerText = JSON.stringify(valueObj);
+            }
+            const switchDisabled = function() {
+                const input = document.querySelector(`[data-input="${this.dataset['check']}"]`);
+                input.disabled = input.disabled ? false : true;
+            }
+
+            form.addEventListener('submit', submitHandler);
+            checkBoxs.forEach(checkbox => checkbox.addEventListener('click', switchDisabled));
+        })()
+    </script>
+</body>
+</html>
